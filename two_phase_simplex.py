@@ -17,6 +17,23 @@ class TwoPhaseSimplex:
         self.n = len(c)
         self.problem_status = ProblemStatus.UNSOLVED
 
+    def _update(self, tableau, basis, pivot_row, pivot_column, pivot):
+        """
+        Update the tableau using the pivot element.
+        """
+        #update tableau
+        tableau[pivot_row] = tableau[pivot_row] / pivot
+        for i in range(self.m + 1):
+            if i != pivot_row:
+                multiplier = tableau[i][pivot_column]
+                tableau[i] = tableau[i] - multiplier * tableau[pivot_row]
+        print(tableau)
+        #update basis
+        print("column", basis[pivot_row - 1], "leave")
+        print("column",pivot_column + 1, "enter")
+        basis[pivot_row - 1] = pivot_column + 1
+        print("current basis", basis)
+
     def _construct_phase1_tableau(self):
         """
         Construct the phase 1 tableau for the auxiliary problem.
@@ -57,19 +74,7 @@ class TwoPhaseSimplex:
                                 min_ratio = ratio
                                 pivot_row = j
                                 pivot = tableau[j][pivot_column]
-                    
-                    #update tableau
-                    tableau[pivot_row] = tableau[pivot_row] / pivot
-                    for i in range(self.m + 1):
-                        if i != pivot_row:
-                            multiplier = tableau[i][pivot_column]
-                            tableau[i] = tableau[i] - multiplier * tableau[pivot_row]
-                    print(tableau)
-                    #update basis
-                    print("column", basis[pivot_row - 1], "leave")
-                    print("column",pivot_column + 1, "enter")
-                    basis[pivot_row - 1] = pivot_column + 1
-                    print("current basis", basis)
+                    self._update(tableau, basis, pivot_row, pivot_column, pivot)
                     #judge whether to stop
                     if np.all(tableau[0] >= 0):
                         if tableau[0][-1] != 0:
@@ -108,18 +113,8 @@ class TwoPhaseSimplex:
                     break
 
             pivot = tableau[pivot_row][pivot_column-1]
-            #update tableau
-            tableau[pivot_row] = tableau[pivot_row] / pivot
-            for i in range(self.m + 1):
-                if i != pivot_row:
-                    multiplier = tableau[i][pivot_column-1]
-                    tableau[i] = tableau[i] - multiplier * tableau[pivot_row]
-            print(tableau)
-            #update basis
-            print("column", basis[pivot_row - 1], "leave")
-            print("column",pivot_column , "enter")
-            basis[pivot_row - 1] = pivot_column 
-            print("current basis", basis)
+
+            self._update(tableau, basis, pivot_row, pivot_column, pivot)
             print("=====================================")
         print("====remove auxiliuary columns====")
         delete_cols = np.arange(self.n, self.n+self.m)
@@ -179,18 +174,7 @@ class TwoPhaseSimplex:
                     if pivot_row is None:
                         self.problem_status = ProblemStatus.UNBOUNDED
                     
-                    #update tableau
-                    tableau[pivot_row] = tableau[pivot_row] / pivot
-                    for i in range(self.m + 1):
-                        if i != pivot_row:
-                            multiplier = tableau[i][pivot_column]
-                            tableau[i] = tableau[i] - multiplier * tableau[pivot_row]
-                    print(tableau)
-                    #update basis
-                    print("column", basis[pivot_row - 1], "leave")
-                    print("column",pivot_column + 1, "enter")
-                    basis[pivot_row - 1] = pivot_column + 1
-                    print("current basis", basis)
+                    self._update(tableau, basis, pivot_row, pivot_column, pivot)
                     #judge whether to stop
                     print("=====================================")
                     if np.all(tableau[0] >= 0):
@@ -233,7 +217,7 @@ if __name__ == "__main__":
     A = np.array([
         [1, 1, 1, 1, 0, 0],
         [0, -1, -1, -1, 1, 0],
-        [1, 0, 2, 0, -1, -1]
+        [-1, 0, -2, 0, 1, 1]
     ])
     # Constarints Matrix
 
