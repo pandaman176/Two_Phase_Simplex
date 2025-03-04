@@ -109,8 +109,10 @@ class TwoPhaseSimplex:
             # pivot_column is the smallest(follow bland's rule by convension) column of original problem but not in basis
             for i in range(1,self.m+1):
                 if i not in basis:
-                    pivot_column = i-1
-                    break
+                    # pivot cannot be zero which means independednt column
+                    if (tableau[pivot_row][i-1] != 0):
+                        pivot_column = i-1
+                        break
 
             pivot = tableau[pivot_row][pivot_column]
 
@@ -217,7 +219,7 @@ if __name__ == "__main__":
     A = np.array([
         [1, 1, 1, 1, 0, 0],
         [0, -1, -1, -1, 1, 0],
-        [-1, 0, -2, 0, 1, 1]
+        [1, 0, 2, 0, -1, -1]
     ])
     # Constarints Matrix
 
