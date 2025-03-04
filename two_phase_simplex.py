@@ -134,9 +134,8 @@ class TwoPhaseSimplex:
         A = np.delete(tableau, [0], axis=0)
         A = np.delete(A, [-1], axis=1)
         Xb = np.array([])
-        for index, value in enumerate(c):
-            if index+1 in basis:
-                Xb = np.append(Xb, value)
+        for index, value in enumerate(basis):
+            Xb = np.append(Xb, c[value-1])
         new_reduce_costs = c - Xb@A
         new_top_row = np.append(new_reduce_costs, -np.dot(x,c))
         tableau[0] = new_top_row
