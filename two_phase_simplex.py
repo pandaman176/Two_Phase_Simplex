@@ -109,10 +109,10 @@ class TwoPhaseSimplex:
             # pivot_column is the smallest(follow bland's rule by convension) column of original problem but not in basis
             for i in range(1,self.m+1):
                 if i not in basis:
-                    pivot_column = i
+                    pivot_column = i-1
                     break
 
-            pivot = tableau[pivot_row][pivot_column-1]
+            pivot = tableau[pivot_row][pivot_column]
 
             self._update(tableau, basis, pivot_row, pivot_column, pivot)
             print("=====================================")
