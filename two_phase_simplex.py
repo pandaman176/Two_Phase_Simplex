@@ -226,7 +226,7 @@ if __name__ == "__main__":
     # right hand side of constraints
 
     # set precision of print to avoid too many digits
-    np.set_printoptions(precision=3)
+    np.set_printoptions(suppress=True, precision=3)
 
     if len(c) != A.shape[1]:
         # check c has same length as column number of A
