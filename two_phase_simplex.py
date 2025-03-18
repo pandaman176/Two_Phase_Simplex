@@ -218,12 +218,22 @@ if __name__ == "__main__":
     A = np.array([
         [1, 1, 1, 1, 0, 0],
         [0, -1, -1, -1, 1, 0],
-        [1, 0, 2, 0, -1, -1]
+        [-1, 0, -2, 0, 1, 1]
     ])
     # Constarints Matrix
 
     b = np.array([1, 1, 0])
     # right hand side of constraints
 
-    simplex = TwoPhaseSimplex(c, A, b)
-    simplex.solve()
+    # set precision of print to avoid too many digits
+    np.set_printoptions(precision=3)
+
+    if len(c) != A.shape[1]:
+        # check c has same length as column number of A
+        print("Error: c has different length with column number of A! Did you forget to consider 0 parameter?")
+    elif np.any(b < 0):
+        # check b positive
+        print("Error: b has negative elements! Remember to start Simplex method we require b >= 0")
+    else:
+        simplex = TwoPhaseSimplex(c, A, b)
+        simplex.solve()
