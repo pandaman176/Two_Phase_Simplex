@@ -230,10 +230,10 @@ if __name__ == "__main__":
 
     if len(c) != A.shape[1]:
         # check c has same length as column number of A
-        print("Error: c has different length with column number of A! Did you forget to consider 0 parameter?")
+        print("\033[31mError\033[0m: c has different length with column number of A! Did you forget to consider 0 parameter?")
     elif np.any(b < 0):
         # check b positive
-        print("Error: b has negative elements! Remember to start Simplex method we require b >= 0")
+        print("\033[31mError\033[0m: b has negative elements! Remember to start Simplex method we require b >= 0")
     else:
         simplex = TwoPhaseSimplex(c, A, b)
         simplex.solve()
