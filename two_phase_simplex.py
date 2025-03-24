@@ -196,6 +196,16 @@ class TwoPhaseSimplex:
         """
         Solve the linear programming problem.
         """
+
+        if len(c) != A.shape[1]:
+            # check c has same length as column number of A
+            print("\033[31mError\033[0m: c has different length with column number of A! Did you forget to consider 0 parameter?")
+            return
+        if np.any(b < 0):
+            # check b positive
+            print("\033[31mError\033[0m: b has negative elements! Remember to start Simplex method we require b >= 0")
+            return
+
         # Solve the phase 1 problem
         tableau, basis = self._solve_phase1()
         if self.problem_status == ProblemStatus.FEASIBLE:
@@ -212,28 +222,20 @@ if __name__ == "__main__":
         x1 + 2x3 - x5 - x6 = 0
         x1, x2, x3, x4, x5, x6 >= 0
     """
-    c = np.array([0, 1, -4, 0, 1, 0]) 
+    c = np.array([3,4,0,0]) 
     #parameter of objective function
     
     A = np.array([
-        [1, 1, 1, 1, 0, 0],
-        [0, -1, -1, -1, 1, 0],
-        [-1, 0, -2, 0, 1, 1]
+        [1, 1, 1, 0],
+        [0,  1, 0,1],
     ])
     # Constarints Matrix
 
-    b = np.array([1, 1, 0])
+    b = np.array([4,5])
     # right hand side of constraints
 
     # set precision of print to avoid too many digits
     np.set_printoptions(suppress=True, precision=3)
 
-    if len(c) != A.shape[1]:
-        # check c has same length as column number of A
-        print("\033[31mError\033[0m: c has different length with column number of A! Did you forget to consider 0 parameter?")
-    elif np.any(b < 0):
-        # check b positive
-        print("\033[31mError\033[0m: b has negative elements! Remember to start Simplex method we require b >= 0")
-    else:
-        simplex = TwoPhaseSimplex(c, A, b)
-        simplex.solve()
+    simplex = TwoPhaseSimplex(c, A, b)
+    simplex.solve()
